@@ -1,24 +1,24 @@
 <template>
   <div class="app">
-    <!-- 🔐 未登录：显示登录/注册 -->
+    <!-- 未登录：显示登录/注册 -->
     <div v-if="!loggedIn" class="auth-container">
-      <h1>🔐 请登录</h1>
+      <h1>🔐 请登录/please log in</h1>
 
       <div class="tabs">
-        <button :class="{ active: tab === 'login' }" @click="tab = 'login'">登录</button>
-        <button :class="{ active: tab === 'register' }" @click="tab = 'register'">注册</button>
+        <button :class="{ active: tab === 'login' }" @click="tab = 'login'">登录/log in</button>
+        <button :class="{ active: tab === 'register' }" @click="tab = 'register'">注册/sign up</button>
       </div>
 
       <div v-if="tab === 'login'" class="form">
-        <input v-model="username" placeholder="用户名" />
-        <input v-model="password" type="password" placeholder="密码" @keyup.enter="doLogin" />
-        <button @click="doLogin">登录</button>
+        <input v-model="username" placeholder="用户名/username" />
+        <input v-model="password" type="password" placeholder="密码/password" @keyup.enter="doLogin" />
+        <button @click="doLogin">登录/log in</button>
       </div>
 
       <div v-else class="form">
-        <input v-model="username" placeholder="用户名" />
-        <input v-model="password" type="password" placeholder="密码（至少6位）" @keyup.enter="doRegister" />
-        <button @click="doRegister">注册</button>
+        <input v-model="username" placeholder="用户名/username" />
+        <input v-model="password" type="password" placeholder="密码（至少6位）/password(At least 6 characters)" @keyup.enter="doRegister" />
+        <button @click="doRegister">注册/sign in</button>
       </div>
 
       <p v-if="error" class="error">{{ error }}</p>
@@ -27,17 +27,17 @@
     <!-- ✅ 已登录：显示 Todo -->
     <div v-else>
       <div class="header">
-        <h1>📝 {{ username }} 的待办事项</h1>
-        <button @click="doLogout">退出登录</button>
+        <h1>📝 {{ username }} 的待办事项/📝 {{ username }} To-do list</h1>
+        <button @click="doLogout">退出登录/log out</button>
       </div>
 
       <div class="input-area">
         <input
           v-model="newTodo"
           @keyup.enter="addTodo"
-          placeholder="输入任务，回车添加"
+          placeholder="输入任务，回车添加/Add a task, then press Enter"
         />
-        <button @click="addTodo">添加</button>
+        <button @click="addTodo">添加/add</button>
       </div>
 
       <ul class="todo-list">
@@ -52,7 +52,7 @@
       </ul>
 
       <p class="footer">
-        还剩 {{ remaining }} 个任务未完成
+        还剩 {{ remaining }} 个任务未完成/{{ remaining }} task(s) left
       </p>
     </div>
   </div>
@@ -91,16 +91,16 @@ async function checkAuth() {
 async function doRegister() {
   error.value = ''
   if (password.value.length < 6) {
-    error.value = '密码至少 6 位'
+    error.value = '密码至少 6 位/At least 6 characters'
     return
   }
   try {
     await register(username.value, password.value)
     error.value = ''
     tab.value = 'login'
-    alert('注册成功，请登录')
+    alert('注册成功，请登录/Registration successful. Please log in.')
   } catch (e: any) {
-    error.value = e.response?.data?.error || '注册失败'
+    error.value = e.response?.data?.error || '注册失败/Registration failed'
   }
 }
 
@@ -114,7 +114,7 @@ async function doLogin() {
     loggedIn.value = true
     await loadTodos()
   } catch (e: any) {
-    error.value = e.response?.data?.error || '登录失败'
+    error.value = e.response?.data?.error || '登录失败/Registration failed'
   }
 }
 
@@ -185,4 +185,5 @@ button { padding: 6px 12px; cursor: pointer; }
 
 .footer { margin-top: 12px; font-size: 14px; color: #666; }
 </style>
+
 

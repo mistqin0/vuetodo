@@ -12,11 +12,11 @@ app.post('/api/register', async (req, res) => {
   const { username, password } = req.body
 
   if (!username || !password) {
-    return res.status(400).json({ error: '用户名和密码不能为空' })
+    return res.status(400).json({ error: '用户名和密码不能为空/Username and password are required.' })
   }
 
   if (password.length < 6) {
-    return res.status(400).json({ error: '密码至少 6 位' })
+    return res.status(400).json({ error: '密码至少 6 位/At least 6 characters' })
   }
 
   try {
@@ -25,12 +25,12 @@ app.post('/api/register', async (req, res) => {
       'INSERT INTO users (username, password_hash) VALUES (?, ?)',
       [username, hash]
     )
-    res.json({ message: '注册成功' })
+    res.json({ message: '注册成功/Registration successful' })
   } catch (e: any) {
     if (e.code === 'ER_DUP_ENTRY') {
-      return res.status(409).json({ error: '用户名已存在' })
+      return res.status(409).json({ error: '用户名已存在/Username already exists.' })
     }
-    res.status(500).json({ error: '服务器错误' })
+    res.status(500).json({ error: '服务器错误/Server error' })
   }
 })
 
@@ -39,7 +39,7 @@ app.post('/api/login', async (req, res) => {
   const { username, password } = req.body
 
   if (!username || !password) {
-    return res.status(400).json({ error: '用户名和密码不能为空' })
+    return res.status(400).json({ error: '用户名和密码不能为空/Username and password are required.' })
   }
 
   const [rows]: any = await db.query(
@@ -48,14 +48,14 @@ app.post('/api/login', async (req, res) => {
   )
 
   if (rows.length === 0) {
-    return res.status(401).json({ error: '用户名或密码错误' })
+    return res.status(401).json({ error: '用户名或密码错误/Invalid username or password.' })
   }
 
   const user = rows[0]
   const valid = await verifyPassword(password, user.password_hash)
 
   if (!valid) {
-    return res.status(401).json({ error: '用户名或密码错误' })
+    return res.status(401).json({ error: '用户名或密码错误/Invalid username or password.' })
   }
 
   const token = generateToken(user.id, user.username)
@@ -66,14 +66,14 @@ app.post('/api/login', async (req, res) => {
 async function authMiddleware(req: any, res: any, next: any) {
   const authHeader = req.headers.authorization
   if (!authHeader?.startsWith('Bearer ')) {
-    return res.status(401).json({ error: '未登录' })
+    return res.status(401).json({ error: '未登录/Not logged in' })
   }
 
   const token = authHeader.slice(7)
   const payload = verifyToken(token)
 
   if (!payload) {
-    return res.status(401).json({ error: '登录已过期' })
+    return res.status(401).json({ error: '登录已过期/Session expired' })
   }
 
   req.userId = payload.userId
@@ -88,7 +88,7 @@ app.get('/api/me', authMiddleware, (req: any, res) => {
 
 // 🔹 退出登录（前端删除 token 即可）
 app.post('/api/logout', (_req, res) => {
-  res.json({ message: '退出成功' })
+  res.json({ message: '退出成功/Logged out successfully' })
 })
 
 // ====== Todo 接口（需要登录） ======
