@@ -23,6 +23,7 @@ vuetodo/
 Run the following command in the project root directory:
 
 ```bash
+sudo apt install -y mariadb-server mariadb-client
 ./start.sh
 ```
 
