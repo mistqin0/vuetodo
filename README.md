@@ -8,7 +8,9 @@ A full-stack Todo application built with Vue.js frontend and a Node.js backend.
 vuetodo/
 ├── myvue/          # Vue.js frontend
 ├── todo-server/    # Node.js backend API
+├── stop.sh         # stop all
 └── start.sh        # One-click startup script
+
 ```
 
 ## Prerequisites
